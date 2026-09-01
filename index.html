@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Combinator MVP</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Combinator</h1>
+    <nav id="tabs">
+      <button data-view="pool" class="active">Pool</button>
+      <button data-view="shuffle">Shuffle</button>
+      <button data-view="enumerate">Enumerate</button>
+      <button data-view="inspire">Inspire</button>
+    </nav>
+    <div class="header-actions">
+      <button id="export-btn" title="Download data as JSON">Export</button>
+      <button id="import-btn" title="Load data from JSON">Import</button>
+      <input type="file" id="import-file" accept="application/json" hidden />
+    </div>
+  </header>
+
+  <main>
+    <!-- POOL -->
+    <section id="view-pool" class="view">
+      <div class="columns">
+        <div class="col">
+          <h2>Issues</h2>
+          <form id="add-issue" class="add-form">
+            <input name="text" placeholder="Describe an issue" required />
+            <div class="row">
+              <input name="type" placeholder="Type (e.g. professional, health)" />
+              <select name="frequency">
+                <option value="chronic">chronic</option>
+                <option value="occasional">occasional</option>
+              </select>
+            </div>
+            <input name="where" placeholder="Where / when it happens" />
+            <button type="submit">Add issue</button>
+          </form>
+          <ul id="issue-list" class="pool-list"></ul>
+        </div>
+
+        <div class="col">
+          <h2>Assets</h2>
+          <p class="hint">Solutions, skills, tools, resources you already have.</p>
+          <form id="add-asset" class="add-form">
+            <input name="text" placeholder="Describe an asset" required />
+            <select name="kind">
+              <option value="solution">solution</option>
+              <option value="skill">skill</option>
+              <option value="tool">tool</option>
+              <option value="resource">resource</option>
+            </select>
+            <button type="submit">Add asset</button>
+          </form>
+          <ul id="asset-list" class="pool-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHUFFLE -->
+    <section id="view-shuffle" class="view" hidden>
+      <div class="shuffle-controls">
+        <label><input type="checkbox" id="shuffle-chronic-only" /> chronic issues only</label>
+        <label><input type="checkbox" id="shuffle-unrated" /> prefer unrated pairs</label>
+        <button id="shuffle-btn">Shuffle</button>
+      </div>
+      <div id="shuffle-stage" class="stage">
+        <p class="empty">Add at least one issue and one asset, then hit Shuffle.</p>
+      </div>
+    </section>
+
+    <!-- ENUMERATE -->
+    <section id="view-enumerate" class="view" hidden>
+      <div class="enum-controls">
+        <label>
+          Anchor type:
+          <select id="enum-anchor-type">
+            <option value="issue">Issue</option>
+            <option value="asset">Asset</option>
+          </select>
+        </label>
+        <label>
+          Anchor:
+          <select id="enum-anchor"></select>
+        </label>
+      </div>
+      <div id="enum-stage" class="stage"></div>
+    </section>
+
+    <!-- INSPIRE -->
+    <section id="view-inspire" class="view" hidden>
+      <div class="inspire-controls">
+        <p class="hint">Stuck? Pick a category, or hit random. Click any prompt to copy it.</p>
+        <div class="inspire-actions">
+          <select id="inspire-filter">
+            <option value="all">All categories</option>
+            <option value="issues">Find issues</option>
+            <option value="assets">Take stock of assets</option>
+            <option value="pairing">Explore a pairing</option>
+            <option value="repurpose">Repurpose from elsewhere</option>
+          </select>
+          <button id="inspire-random">Random prompt</button>
+        </div>
+        <div id="inspire-random-stage"></div>
+      </div>
+      <div id="inspire-list"></div>
+    </section>
+  </main>
+
+  <template id="tpl-pair-card">
+    <div class="pair-card">
+      <div class="pair-cells">
+        <div class="cell issue-cell">
+          <div class="cell-label">Issue</div>
+          <div class="cell-text"></div>
+          <div class="cell-meta"></div>
+        </div>
+        <div class="cell asset-cell">
+          <div class="cell-label">Asset</div>
+          <div class="cell-text"></div>
+          <div class="cell-meta"></div>
+        </div>
+      </div>
+      <div class="pair-actions">
+        <button data-rating="nope" title="Not useful">👎</button>
+        <button data-rating="stretch" title="Stretch">🤔</button>
+        <button data-rating="promising" title="Promising">👍</button>
+        <button data-rating="pursue" title="Pursue">⭐</button>
+      </div>
+      <details class="elaborate">
+        <summary>Elaborate / log attempt</summary>
+        <textarea class="how" placeholder="How would you deploy this? Where? When?"></textarea>
+        <textarea class="outcome" placeholder="Outcome (fill in later)"></textarea>
+        <button class="save-attempt">Save attempt</button>
+      </details>
+      <div class="prior-attempts"></div>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
